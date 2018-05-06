@@ -31,18 +31,129 @@ class EvaluationCrudController extends CrudController
         $this->crud->setFromDb();
 
         // ------ CRUD FIELDS
-        $this->crud->addField([ // Table
-            'name' => 'options',
-            'label' => 'Options',
-            'type' => 'table',
-            'entity_singular' => 'option', // used on the "Add X" button
-            'columns' => [
-                'name' => 'Name',
-                'desc' => 'Description',
-                'price' => 'Price'
+        $this->crud->addField([
+            // 1-n relationship
+            'label' => "Choose a Course Unit to Evaluate", // Table column heading
+            'type' => "select2_from_ajax",
+            'name' => 'course_unit_id', // the column that contains the ID of that connected entity
+            'entity' => 'courseUnit', // the method that defines the relationship in your Model
+            'attribute' => "name", // foreign key attribute that is shown to user
+            'model' => "App\Models\CourseUnit", // foreign key model
+            'data_source' => url("api/courseunit"), // url to controller search function (with /{id} should return model)
+            'placeholder' => "Select a Course Unit", // placeholder for the select
+            'minimum_input_length' => 1, // minimum characters to type before querying results
+        ]);
+
+        $this->crud->addField([
+            'name'    => 'structure', // the name of the db column
+            'label'   => 'How is the current structure of the course unit?', // the input label
+            'type'    => 'radio',
+            'options' => [ // the key will be stored in the db, the value will be shown as label;
+                0 => 'poor',
+                1 => 'fair',
+                2 => 'good',
+                3 => 'very good',
+                4 => 'Excellent'
             ],
-            'max' => 5, // maximum rows allowed in the table
-            'min' => 0 // minimum rows allowed in the table
+            // optional
+            'inline' => true, // show the radios all on the same line?
+            'tab'    => 'Course Unit',
+        ]);
+
+        $this->crud->addField([
+            'name'    => 'how_it_is_taught', // the name of the db column
+            'label'   => 'How is the course unit being taught currently?', // the input label
+            'type'    => 'radio',
+            'options' => [ // the key will be stored in the db, the value will be shown as label;
+                0 => 'poor',
+                1 => 'fair',
+                2 => 'good',
+                3 => 'very good',
+                4 => 'Excellent'
+            ],
+            // optional
+            'inline' => true, // show the radios all on the same line?
+            'tab'    => 'Course Unit',
+        ]);
+
+        $this->crud->addField([
+            'name'    => 'relevance', // the name of the db column
+            'label'   => 'Is the course unit relevant in the course that you are offering?', // the input label
+            'type'    => 'radio',
+            'options' => [ // the key will be stored in the db, the value will be shown as label;
+                0 => 'poor',
+                1 => 'fair',
+                2 => 'good',
+                3 => 'very good',
+                4 => 'Excellent'
+            ],
+            // optional
+            'inline' => true, // show the radios all on the same line?
+            'tab'    => 'Course Unit',
+        ]);
+
+        $this->crud->addField([
+            'name'    => 'tutor', // the name of the db column
+            'label'   => 'How would you rate the tutor delivering the course unit?', // the input label
+            'type'    => 'radio',
+            'options' => [ // the key will be stored in the db, the value will be shown as label;
+                0 => 'poor',
+                1 => 'fair',
+                2 => 'good',
+                3 => 'very good',
+                4 => 'Excellent'
+            ],
+            // optional
+            'inline' => true, // show the radios all on the same line?
+            'tab'    => 'Course Unit',
+        ]);
+
+        $this->crud->addField([   // Summernote
+            'name' => 'changes_suggested',
+            'label' => 'What would you like to be changed in the course unit?',
+            'type' => 'summernote',
+            'tab' => 'Course Unit Changes'
+            // 'options' => [], // easily pass parameters to the summernote JS initialization
+        ]);
+
+        $this->crud->addField([   // Summernote
+            'name' => 'non_changes_suggested',
+            'label' => 'What would you like to stay the same in the course unit?',
+            'type' => 'summernote',
+            'tab' => 'Course Unit Changes'
+            // 'options' => [], // easily pass parameters to the summernote JS initialization
+        ]);
+
+        $this->crud->addField([
+            'name'    => 'lecture_room', // the name of the db column
+            'label'   => 'How would you rate the lecture rooms in which the course unit is taught?', // the input label
+            'type'    => 'radio',
+            'options' => [ // the key will be stored in the db, the value will be shown as label;
+                0 => 'poor',
+                1 => 'fair',
+                2 => 'good',
+                3 => 'very good',
+                4 => 'Excellent'
+            ],
+            // optional
+            'inline' => true, // show the radios all on the same line?
+            'tab'    => 'Lecture Rooms',
+        ]);
+
+        $this->crud->addField([   // Summernote
+            'name' => 'description_about_lecture_room',
+            'label' => 'Write a brief description about the Lecture room?',
+            'type' => 'summernote',
+            'tab' => 'Lecture Rooms'
+            // 'options' => [], // easily pass parameters to the summernote JS initialization
+        ]);
+
+        $this->crud->addField([   // Summernote
+            'name' => 'recommendations',
+            'label' => 'What are your recommendations for the course unit?',
+            'type' => 'summernote',
+            'tab' => 'Recommendations'
+            // 'options' => [], // easily pass parameters to the summernote JS initialization
         ]);
 
         // $this->crud->addField($options, 'update/create/both');
@@ -69,6 +180,8 @@ class EvaluationCrudController extends CrudController
         // $this->crud->removeAllButtonsFromStack('line');
 
         // ------ CRUD ACCESS
+        if (!auth()->user()->hasRole('student')) $this->crud->denyAccess(['create']);
+        if (auth()->user()->hasRole('student')) $this->crud->denyAccess(['list', 'update', 'reorder', 'delete']);
         // $this->crud->allowAccess(['list', 'create', 'update', 'reorder', 'delete']);
         // $this->crud->denyAccess(['list', 'create', 'update', 'reorder', 'delete']);
 

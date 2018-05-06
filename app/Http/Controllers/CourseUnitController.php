@@ -2,84 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\CourseUnit;
+use App\Models\CourseUnit;
 use Illuminate\Http\Request;
 
 class CourseUnitController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $search_term = $request->input('q');
+        $page = $request->input('page');
+
+        if ($search_term)
+        {
+            $results = CourseUnit::where('name', 'LIKE', '%'.$search_term.'%')->paginate(10);
+        }
+        else
+        {
+            $results = CourseUnit::paginate(10);
+        }
+
+        return \Response::json($results);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\CourseUnit  $courseUnit
+     * @param  \App\CourseUnit  $CourseUnit
      * @return \Illuminate\Http\Response
      */
-    public function show(CourseUnit $courseUnit)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\CourseUnit  $courseUnit
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CourseUnit $courseUnit)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CourseUnit  $courseUnit
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, CourseUnit $courseUnit)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\CourseUnit  $courseUnit
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(CourseUnit $courseUnit)
-    {
-        //
+        return CourseUnit::find($id);
     }
 }

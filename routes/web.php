@@ -17,3 +17,6 @@ Route::get('/', function () {
 
 Route::get('/api/department', 'DepartmentController@index');
 Route::get('/api/department/{id}', 'DepartmentController@show');
+
+Route::get('/api/courseunit', 'CourseUnitController@index');
+Route::get('/api/courseunit/{id}', 'CourseUnitController@show');

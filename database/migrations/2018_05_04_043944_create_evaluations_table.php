@@ -15,8 +15,7 @@ class CreateEvaluationsTable extends Migration
     {
         Schema::create('evaluations', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('evaluationable_id')->index();
-            $table->string('evaluationable_type');
+            $table->unsignedInteger('course_unit_id')->index();
             $table->string('structure')->nullable();
             $table->string('how_it_is_taught')->nullable();
             $table->string('relevance')->nullable();
@@ -25,7 +24,6 @@ class CreateEvaluationsTable extends Migration
             $table->string('tutor')->nullable();
             $table->text('changes_suggested')->nullable();
             $table->text('non_changes_suggested')->nullable();
-            $table->text('suggestion')->nullable();
             $table->text('recommendations')->nullable();
             $table->timestamps();
         });

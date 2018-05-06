@@ -26,7 +26,14 @@ class EvaluationRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'course_unit_id' => 'required|integer',
+            'relevance' => 'required',
+            'structure' => 'required',
+            'how_it_is_taught' => 'required',
+            'structure' => 'required',
+            'lecture_room' => 'required',
+            'description_about_lecture_room' => 'required|min:3',
+            'tutor' => 'required',
         ];
     }
 

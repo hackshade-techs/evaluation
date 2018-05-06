@@ -49,7 +49,7 @@ class SuggestionCrudController extends CrudController
             'model' => "App\Models\Department", // foreign key model
             'data_source' => url("api/department"), // url to controller search function (with /{id} should return model)
             'placeholder' => "Select a Department", // placeholder for the select
-            'minimum_input_length' => 2, // minimum characters to type before querying results
+            'minimum_input_length' => 1, // minimum characters to type before querying results
             'tab' => 'Title'
         ]);
 

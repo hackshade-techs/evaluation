@@ -18,8 +18,8 @@ class Evaluation extends Model
     protected $table = 'evaluations';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
-    // protected $guarded = ['id'];
-    protected $fillable = [];
+    protected $guarded = ['id'];
+    // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -34,6 +34,10 @@ class Evaluation extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+
+    public function courseUnit () {
+        return $this->belongsTo('App\Models\CourseUnit');
+    }
 
     /*
     |--------------------------------------------------------------------------
